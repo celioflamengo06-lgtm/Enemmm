@@ -1,18 +1,11 @@
 const https = require('https');
 
-// Helper GET nativo
 function requestGet(url) {
   return new Promise((resolve, reject) => {
     https.get(url, (res) => {
       let data = '';
-      res.on('data', (chunk) => { data += chunk; });
-      res.on('end', () => {
-        resolve({
-          ok: res.statusCode >= 200 && res.statusCode < 300,
-          status: res.statusCode,
-          text: data
-        });
-      });
+      res.on('data', chunk => { data += chunk; });
+      res.on('end', () => resolve({ status: res.statusCode, text: data }));
     }).on('error', reject);
   });
 }
@@ -42,18 +35,16 @@ exports.handler = async (event) => {
 
   const token = process.env.CPF_API_TOKEN;
   if (!token) {
-    console.error('[CPF] CPF_API_TOKEN não configurado');
     return { statusCode: 502, headers, body: JSON.stringify({ success: false, erro: 'Token não configurado.' }) };
   }
 
   try {
     const url = `https://magmadatahub.com/api.php?token=${token}&cpf=${cpfLimpo}`;
-    console.log('[CPF] Consultando:', url.replace(token, '***'));
-
     const result = await requestGet(url);
+
     console.log('[CPF] Status:', result.status, 'Body:', result.text.slice(0, 200));
 
-    if (!result.ok) {
+    if (result.status < 200 || result.status >= 300) {
       return { statusCode: result.status, headers, body: JSON.stringify({ success: false, erro: 'Erro na base externa.' }) };
     }
 
@@ -61,7 +52,6 @@ exports.handler = async (event) => {
     try {
       data = JSON.parse(result.text);
     } catch (e) {
-      console.error('[CPF] JSON inválido:', result.text.slice(0, 200));
       return { statusCode: 502, headers, body: JSON.stringify({ success: false, erro: 'Resposta inválida da API.' }) };
     }
 
