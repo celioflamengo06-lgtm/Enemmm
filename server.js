@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path    = require('path');
+const https   = require('https');
 const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
@@ -19,6 +20,43 @@ if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY) {
   console.warn('Supabase não configurado — dados não serão persistidos.');
 }
 
+// ── Helper GET nativo ─────────────────────────────────────────────────────────
+function httpGet(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      let data = '';
+      res.on('data', chunk => { data += chunk; });
+      res.on('end', () => resolve({ status: res.statusCode, text: data }));
+    }).on('error', reject);
+  });
+}
+
+// ── Helper POST nativo ────────────────────────────────────────────────────────
+function httpPost(url, reqHeaders, body) {
+  return new Promise((resolve, reject) => {
+    const urlObj = new URL(url);
+    const options = {
+      hostname: urlObj.hostname,
+      path: urlObj.pathname + urlObj.search,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Content-Length': Buffer.byteLength(body),
+        ...reqHeaders
+      }
+    };
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', chunk => { data += chunk; });
+      res.on('end', () => resolve({ status: res.statusCode, text: data }));
+    });
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
+
 // ── GET /api/cpf ──────────────────────────────────────────────────────────────
 app.get('/api/cpf', async (req, res) => {
   const cpfLimpo = (req.query.cpf || '').replace(/\D/g, '');
@@ -26,15 +64,14 @@ app.get('/api/cpf', async (req, res) => {
     return res.status(400).json({ success: false, erro: 'CPF inválido.' });
   }
 
+  if (!process.env.CPF_API_TOKEN) {
+    return res.status(502).json({ success: false, erro: 'Token CPF não configurado.' });
+  }
+
   try {
     const url = `https://magmadatahub.com/api.php?token=${process.env.CPF_API_TOKEN}&cpf=${cpfLimpo}`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      return res.status(response.status).json({ success: false, erro: 'Erro na base externa.' });
-    }
-
-    const data = await response.json();
+    const result = await httpGet(url);
+    const data = JSON.parse(result.text);
 
     if (supabase && data.nome) {
       await supabase.from('leads').upsert(
@@ -57,32 +94,43 @@ app.post('/api/pix', async (req, res) => {
     return res.status(400).json({ message: 'Nome e CPF são obrigatórios.' });
   }
 
+  const publicKey = process.env.SLIMMPAY_PUBLIC_KEY;
+  const secretKey = process.env.SLIMMPAY_SECRET_KEY;
+
+  if (!publicKey || !secretKey) {
+    return res.status(502).json({ message: 'Credenciais Slimmpay não configuradas.' });
+  }
+
   try {
-    const response = await fetch('https://api.gothampaybr.com/api/v1/pix/cashin', {
-      method: 'POST',
-      headers: {
-        'X-Client-Id':     process.env.GOTHAM_CLIENT_ID,
-        'X-Client-Secret': process.env.GOTHAM_CLIENT_SECRET,
-        'Content-Type':    'application/json'
-      },
-      body: JSON.stringify({
-        nome,
-        cpf,
-        valor:    85,
-        descricao: 'Caderno Falante'
-      })
+    const cpfLimpo = cpf.replace(/\D/g, '');
+    const basicToken = Buffer.from(`${publicKey}:${secretKey}`).toString('base64');
+
+    const body = JSON.stringify({
+      payment_method: 'pix',
+      amount: 85,
+      description: 'Livro Falante',
+      customer: {
+        name: nome,
+        document: { type: 'cpf', number: cpfLimpo }
+      }
     });
 
-    const data = await response.json();
+    const result = await httpPost(
+      'https://api.slimmpay.com.br/v1/payment-transaction/create',
+      { 'Authorization': `Basic ${basicToken}` },
+      body
+    );
+
+    const data = JSON.parse(result.text);
 
     if (supabase && data.id) {
       await supabase.from('pagamentos').insert({
         gotham_id:    data.id,
         nome,
-        cpf,
+        cpf:          cpfLimpo,
         valor:        85,
-        status:       data.status,
-        qr_code_text: data.qr_code_text,
+        status:       data.status || 'PENDING',
+        qr_code_text: data.qr_code_text || data.pix_copy_paste || null,
         expires_at:   data.expires_at || null
       });
     }
